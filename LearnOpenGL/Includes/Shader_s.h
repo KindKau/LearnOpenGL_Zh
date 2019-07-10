@@ -8,12 +8,12 @@
 #include <sstream>
 #include <iostream>
 
-class shader
+class Shader
 {
 public:
 	unsigned int ID;
 
-	shader(const GLchar* vertexPath, const GLchar* fragmentPath)
+	Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	{
 		// 1. 从文件路径中获取顶点/片段着色器
 		std::string vertexCode;

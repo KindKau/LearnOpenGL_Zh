@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\1_3_HelloTriangle_shader.cpp">
+    <ClCompile Include="Includes\glad\src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Includes\glad\src\glad.c">
+    <ClCompile Include="source\1_7_HelloTexture_Mix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,5 +26,13 @@
     <ClInclude Include="Includes\Shader_s.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Includes\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\container.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>
