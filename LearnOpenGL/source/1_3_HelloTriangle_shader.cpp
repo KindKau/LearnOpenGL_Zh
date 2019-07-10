@@ -8,6 +8,7 @@
 
 int main()
 {
+	//---------------------------Window-------------------------------
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -31,11 +32,13 @@ int main()
 		return -1;
 	}
 	
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/vertex.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/fragment.fs";
+	//---------------------------Shader-------------------------------
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/0_vertex.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/0_fragment.fs";
 	shader OurShader(vertexShaderPath, fragmentShaderPath);
 
 
+	//---------------------------Geometry-------------------------------
 	float vertices[] = {
 	-0.5f, -0.5f, 0.0f,  1.0f,0.0f,0.0f ,// left  
 	 0.5f, -0.5f, 0.0f, 0.0f,1.0f,0.0f ,// right 
@@ -43,22 +46,24 @@ int main()
 	};
 
 
+	//---------------------------Buffer-------------------------------
 	unsigned int VBO, VAO;
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	//position
+	// Position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	//color
+	// Color
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	
-	//uniform
+	//---------------------------Uniform-------------------------------
 	float offset = 0;
 
+	//-----------------------------RENDER LOOP---------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.3f, 0.5f, 0.2f, 1.0f);
@@ -76,6 +81,8 @@ int main()
 		glfwPollEvents();
 	}
 
+
+	//---------------------------Close-------------------------------
 	glfwTerminate();
 	return 0;
 }
