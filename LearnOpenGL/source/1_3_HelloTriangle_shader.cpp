@@ -31,8 +31,8 @@ int main()
 		return -1;
 	}
 	
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL/LearnOpenGL/LearnOpenGL/Shaders/vertex.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL/LearnOpenGL/LearnOpenGL/Shaders/fragment.fs";
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/vertex.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/fragment.fs";
 	shader OurShader(vertexShaderPath, fragmentShaderPath);
 
 
