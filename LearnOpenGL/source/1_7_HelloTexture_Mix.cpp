@@ -44,7 +44,7 @@ int main()
 	// Texture 1
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	
-	//纹理重复方式 repeat  贴图过滤方式 linear
+	//纹理重复方式   贴图过滤方式 linear
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
