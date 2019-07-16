@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Includes\glad\src\glad.c" />
-    <ClCompile Include="source\1_7_HelloTexture_Mix.cpp" />
+    <ClCompile Include="source\1_8_Hello_Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Shader_s.h" />
