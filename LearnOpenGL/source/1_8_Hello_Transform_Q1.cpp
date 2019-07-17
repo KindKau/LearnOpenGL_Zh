@@ -160,8 +160,9 @@ int main()
 		//---------------------------Transform-------------------------------
 		glm::mat4 trans;
 		float rotAngle = (float)glfwGetTime();
-		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 1.0f));
+		// 先旋转 再位移
 		trans = glm::rotate(trans, rotAngle, glm::vec3(0.0, 0.0, 1.0));
+		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 1.0f));
 		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
 		OurShader.use();

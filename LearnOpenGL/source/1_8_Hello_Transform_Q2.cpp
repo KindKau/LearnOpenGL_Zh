@@ -48,8 +48,8 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	
 	//纹理环绕方式   纹理过滤方式 linear
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -90,7 +90,7 @@ int main()
 	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/2_transform.vs";
 	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/2_transform.fs";
 	Shader OurShader(vertexShaderPath, fragmentShaderPath);
-
+	Shader OurShader2(vertexShaderPath, fragmentShaderPath);
 
 	//---------------------------Geometry-------------------------------
 	float vertices[] = {
@@ -139,7 +139,6 @@ int main()
 
 
 
-
 	//-----------------------------RENDER LOOP---------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
@@ -173,6 +172,12 @@ int main()
 		OurShader.setFloat("offset", offset);
 		
 		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		
+		glm::mat4 trans2;
+		trans2 = glm::translate(trans2, glm::vec3(-0.5f, 0.0f, 0.0f));
+		glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans2));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
