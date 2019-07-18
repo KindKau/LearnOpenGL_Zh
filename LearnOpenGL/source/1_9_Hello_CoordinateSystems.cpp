@@ -14,6 +14,9 @@
 
 float maxInput(GLFWwindow* window);
 
+int screenWidth = 800;
+int screenHeight = 600;
+
 int main()
 {
 	//---------------------------Window-------------------------------
@@ -24,7 +27,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Hello Triangle", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Hello Triangle", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to Create Windows" << std::endl;
@@ -48,8 +51,8 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	
 	//纹理环绕方式   纹理过滤方式 linear
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -87,10 +90,10 @@ int main()
 	stbi_image_free(data);
 
 	//---------------------------Shader-------------------------------
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/2_transform.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/2_transform.fs";
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/3_coordinateSystems.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/3_coordinateSystems.fs";
 	Shader OurShader(vertexShaderPath, fragmentShaderPath);
-	Shader OurShader2(vertexShaderPath, fragmentShaderPath);
+
 
 	//---------------------------Geometry-------------------------------
 	float vertices[] = {
@@ -127,6 +130,8 @@ int main()
 
 
 
+
+
 	//---------------------------Uniform-------------------------------
 	float offset = 0;
 	//设置每个着色器采样器属于哪个纹理单元,这个只设置一次即可。
@@ -139,42 +144,50 @@ int main()
 
 
 
+
 	//-----------------------------RENDER LOOP---------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.3f, 0.5f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		//《纹理单元》
+		//一个纹理的位置值通常称为一个纹理单元，通过把纹理单元赋值给采样器，使用glActiveTexture激活纹理单元，传入我们需要使用的纹理单元。（每个纹理单元可采样一张图片）
 
-
-		glActiveTexture(GL_TEXTURE0);//激活纹理单元
+		//绑定两个纹理到对应的纹理单元，然后定义哪个uniform采样器对应哪个纹理单元
+		glActiveTexture(GL_TEXTURE0);//以通过GL_TEXTURE0 + 8的方式获得GL_TEXTURE8
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 		glActiveTexture(GL_TEXTURE0+1);
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 
 		
 		
-		//---------------------------Transform-------------------------------
-		glm::mat4 trans;
-		float rotAngle = (float)glfwGetTime();
-		trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 1.0f));
-		trans = glm::rotate(trans, rotAngle, glm::vec3(0.0, 0.0, 1.0));
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+	
+		//------------------------------Coordinate Systems---------------------------------
+		// 1. Model Matrix (事实上就是一个变换矩阵，用于移动旋转缩放等)  From Local Space To World Space
+		glm::mat4 model;
+		model = glm::rotate(model, glm::radians(55.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		// 2. View Matrix (以相反于摄像机移动的方向移动整个场景)         From World Space To Camera(Eye) Space
+		glm::mat4 view;
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		// 3. Projection Matrix (Orthographic vs Perspective)            From Camera(Eye) Space To Clip Space
+		glm::mat4 projection;
+		//projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / screenHeight, 0.1f, 100.f);
+		projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -100.1f, 100.0f);
 
 		OurShader.use();
-		unsigned int transLocation = glGetUniformLocation(OurShader.ID, "transform");
-		glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans));
-		//----------------------Transform-----End-------------------------------
+		unsigned int modelLoc = glGetUniformLocation(OurShader.ID, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		unsigned int viewLoc = glGetUniformLocation(OurShader.ID, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		unsigned int projectLoc = glGetUniformLocation(OurShader.ID, "projection");
+		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//---------------------------Coordinate Systems End-------------------------------
 
-		offset += maxInput(window);
+		offset = 0.5f +  maxInput(window);
 		OurShader.setFloat("offset", offset);
 		
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		
-		glm::mat4 trans2;
-		trans2 = glm::translate(trans2, glm::vec3(-0.5f, 0.0f, 0.0f));
-		glUniformMatrix4fv(transLocation, 1, GL_FALSE, glm::value_ptr(trans2));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
