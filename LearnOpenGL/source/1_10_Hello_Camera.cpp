@@ -182,7 +182,7 @@ int main()
 	  glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-
+	
 	//-----------------------------RENDER LOOP---------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
@@ -202,11 +202,44 @@ int main()
 		glBindVertexArray(VAO);
 		
 	
-		//------------------------------Coordinate Systems---------------------------------
+		
+		//----------------------------------------- Camera -------------------------------------------
+		// 1 摄像机位置  +Z轴指向屏幕（原始）
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+		// 2  摄像机方向 这里是指向摄像机的矢量
+		glm::vec3 cameraTarget = glm:: vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+		// 3 右轴
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+		// 4 上轴
+		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+		// 5 LookAt 使用3个相互垂直（或非线性）的轴定义了一个坐标空间，你可以用这3个轴外加一个平移向量来创建一个矩阵，并且你可以用这个矩阵乘以任何向量来将其变换到那个坐标空间。这正是LookAt矩阵所做的。
+		/*
+		glm::mat4 view_lookat;
+		view_lookat = glm::mat4(cameraRight, 0.0f,
+								cameraUp, 0.0f,
+								cameraDirection, 0.0f,
+								0.0f, 0.0f, 0.0f, 1.0f);
+		*/
+		// GLM提供了LookAt矩阵创建
+		glm::mat4 view_glm_lookat;
+		view_glm_lookat = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),//摄像机位置
+			glm::vec3(0.0f, 0.0f, 0.0f),//目标位置
+			glm::vec3(0.0f, 1.0f, 0.0f));//世界空间向上向量
 
-		// 2. View Matrix (以相反于摄像机移动的方向移动整个场景)         From World Space To Camera(Eye) Space
+
+		// Example
+		float radius = 10.f;
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
 		glm::mat4 view;
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	
+		//----------------------------------- Camera  End --------------------------------------
+
+
 		// 3. Projection Matrix (Orthographic vs Perspective)            From Camera(Eye) Space To Clip Space
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / screenHeight, 0.1f, 100.f);

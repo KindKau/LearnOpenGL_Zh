@@ -12,10 +12,25 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-float maxInput(GLFWwindow* window);
+void processInput(GLFWwindow* window);
 
 int screenWidth = 800;
 int screenHeight = 600;
+
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+//------------------------------------ Camera Object -------------------------------------------
+// 摄像机变量
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+
+
+
+
+
 
 int main()
 {
@@ -182,7 +197,7 @@ int main()
 	  glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-
+	
 	//-----------------------------RENDER LOOP---------------------------------
 	while (!glfwWindowShouldClose(window))
 	{
@@ -201,12 +216,16 @@ int main()
 		
 		glBindVertexArray(VAO);
 		
-	
-		//------------------------------Coordinate Systems---------------------------------
-
-		// 2. View Matrix (以相反于摄像机移动的方向移动整个场景)         From World Space To Camera(Eye) Space
+		// Update Camera
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		processInput(window);
 		glm::mat4 view;
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::lookAt(cameraPos/*摄像机位置*/, cameraPos + cameraFront /*目标位置*/, cameraUp /*世界空间向上向量*/);
+
+
+
 		// 3. Projection Matrix (Orthographic vs Perspective)            From Camera(Eye) Space To Clip Space
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / screenHeight, 0.1f, 100.f);
@@ -221,9 +240,6 @@ int main()
 		unsigned int projectLoc = glGetUniformLocation(OurShader.ID, "projection");
 		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		
-		offset = 0.5f + maxInput(window);
-		OurShader.setFloat("offset", offset);
 
 		for (unsigned int i = 0; i < 10; i++)
 		{
@@ -241,12 +257,6 @@ int main()
 		}
 
 
-		
-		
-
-
-	
-
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -257,14 +267,15 @@ int main()
 	return 0;
 }
 
-float maxInput(GLFWwindow* window)
+void processInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-	{
-		return 0.01f;
-	}else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-	{
-		return -0.01f;
-	}
-	return 0.0f;
+	float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }

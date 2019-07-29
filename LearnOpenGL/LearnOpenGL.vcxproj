@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Includes\glad\src\glad.c" />
-    <ClCompile Include="source\1_9_Hello_CoordinateSystems_3D.cpp" />
+    <ClCompile Include="source\1_11_Hello_CameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Shader_s.h" />
