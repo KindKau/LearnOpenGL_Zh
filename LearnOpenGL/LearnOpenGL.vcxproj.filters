@@ -18,7 +18,7 @@
     <ClCompile Include="Includes\glad\src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\1_11_Hello_CameraSystem.cpp">
+    <ClCompile Include="source\1_12_Hello_CameraClass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,6 +27,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Includes\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\learnopengl\camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

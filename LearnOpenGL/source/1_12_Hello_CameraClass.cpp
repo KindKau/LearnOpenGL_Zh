@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Shader_s.h"
+#include "camera.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,14 +29,8 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-//储存上一帧的鼠标位置，把它的初始值设置为屏幕的中心(800*600)
-float lastX = 400.0, lastY = 300.0;
-float yaw = 0.0, pitch = 0.0;
-bool firstMouse = true;
-
-// Field of view
-float fov = 45.0;
-
+// Camera
+camera myCamera(cameraPos, cameraFront, cameraUp,screenWidth, screenHeight);
 
 int main()
 {
@@ -248,13 +243,13 @@ int main()
 
 		// 6 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(fov), (float)screenWidth / screenHeight, 0.1f, 100.f);
+		projection = myCamera.getCameraPerspMatrix();
 		unsigned int projectLoc = glGetUniformLocation(OurShader.ID, "projection");
 		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		
 		// 7
 		glm::mat4 view;
-		view = glm::lookAt(cameraPos/*摄像机位置*/, cameraPos + cameraFront /*目标位置*/, cameraUp /*世界空间向上向量*/);
+		view = myCamera.getCameraViewMatrix();
 		unsigned int viewLoc = glGetUniformLocation(OurShader.ID, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		
@@ -297,64 +292,21 @@ void processInput(GLFWwindow* window)
 
 	float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
+		myCamera.cameraMotion(motionInput::forward, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
+		myCamera.cameraMotion(motionInput::backward, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		myCamera.cameraMotion(motionInput::lift, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		myCamera.cameraMotion(motionInput::right, deltaTime);
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-	
-	float offsetX = (float)xpos - lastX;
-	float offsetY = lastY - (float)ypos;
-	lastX = xpos;
-	lastY = ypos;
-
-
-	float sensitivity = 0.05f;
-	offsetX *= sensitivity;
-	offsetY *= sensitivity;
-
-	yaw += offsetX;
-	pitch += offsetY;
-
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
-
-	glm::vec3 front;
-	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	front.y = sin(glm::radians(pitch));
-	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-
-	std::cout << "offset X = " << offsetX << "  offset Y = " << offsetY << std::endl;
-
-	cameraFront = glm::normalize(front);
+	myCamera.cameraRotation(xpos, ypos);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	if (fov >= 1.0f && fov <= 45.0f)
-	{
-		fov -= yoffset;
-	}
-	if (fov <= 1.0f)
-	{
-		fov = 1.0f;
-	}
-	if (fov >= 45.0f)
-	{
-		fov = 45.0f;
-	}
+	myCamera.cameraZoom(yoffset);
 }
