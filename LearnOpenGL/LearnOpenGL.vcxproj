@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Includes\glad\src\glad.c" />
-    <ClCompile Include="source\2_Lighting\2_1_Colors.cpp" />
+    <ClCompile Include="source\2_Lighting\2_2_Phong.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\camera.h" />
