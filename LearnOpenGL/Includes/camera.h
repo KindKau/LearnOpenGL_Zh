@@ -20,6 +20,7 @@ enum motionInput {
 	down
 };
 
+bool beginRender = true;
 
 class camera
 {
@@ -114,6 +115,13 @@ public:
 
 	void cameraRotation(float x, float y)
 	{
+		if (beginRender)
+		{
+			xlast = x;
+			ylast = y;
+			beginRender = false;
+		}
+		
 		float xoffset = x - xlast;
 		float yoffset = ylast - y;
 		xlast = x;
