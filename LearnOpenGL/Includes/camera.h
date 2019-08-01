@@ -15,7 +15,9 @@ enum motionInput {
 	forward,
 	backward,
 	right,
-	lift
+	lift,
+	up,
+	down
 };
 
 
@@ -83,6 +85,14 @@ public:
 		if (input == lift)
 		{
 			cameraPos -= glm::cross(cameraFront, cameraUp) * deltTime * SPEED;
+		}
+		if (input == up)
+		{
+			cameraPos += cameraUp * deltTime * SPEED;
+		}
+		if (input == down)
+		{
+			cameraPos -= cameraUp * deltTime * SPEED;
 		}
 	}
 
