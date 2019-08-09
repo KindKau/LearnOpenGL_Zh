@@ -28,6 +28,8 @@ public:
 	glm::vec3 cameraPos =  glm::vec3(0.0f,0.0f,0.0f);
 	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3  cameraRight = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	float cameraSpeed;
 	float cameraSensitivity;
 	float camerafov;
@@ -57,6 +59,8 @@ public:
 
 		yaw = YAW;
 		pitch = PITCH;
+
+		updateCameraVectors();
 	}
 
 	glm::mat4 getCameraViewMatrix()
@@ -67,6 +71,11 @@ public:
 	glm::mat4 getCameraPerspMatrix()
 	{
 		return glm::perspective(glm::radians(camerafov), (float)Width / Height, near, far);
+	}
+
+	glm::vec3 getCameraPosWS()
+	{
+		return cameraPos;
 	}
 
 	void cameraMotion(motionInput input, float deltTime)
@@ -81,11 +90,11 @@ public:
 		}
 		if (input == right)
 		{
-			cameraPos += glm::cross(cameraFront,cameraUp) * deltTime * SPEED;
+			cameraPos += cameraRight * deltTime * SPEED;
 		}
 		if (input == lift)
 		{
-			cameraPos -= glm::cross(cameraFront, cameraUp) * deltTime * SPEED;
+			cameraPos -= cameraRight * deltTime * SPEED;
 		}
 		if (input == up)
 		{
@@ -137,14 +146,18 @@ public:
 		if (pitch < -89.0f)
 			pitch = -89.0f;
 
+		updateCameraVectors();
+	}
+private:
+	void updateCameraVectors()
+	{
 		glm::vec3 front;
 		front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
 		front.y = sin(glm::radians(pitch));
 		front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-		
-		cameraFront = normalize(front);
+		cameraFront = glm::normalize(front);
+		cameraRight = glm::normalize(glm::cross(cameraFront, worldUp));
+		cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
 	}
-private:
-
 
 };

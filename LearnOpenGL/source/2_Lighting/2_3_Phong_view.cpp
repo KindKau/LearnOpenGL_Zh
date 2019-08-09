@@ -74,8 +74,8 @@ int main()
 
 
 	//---------------------------Shader-------------------------------
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/5_PhongLightingModel.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/5_PhongLightingModel.fs";
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/6_Phong_ViewSpace.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/6_Phong_ViewSpace.fs";
 	const char* lightFragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.fs";
 	const char* lightVertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.vs";
 	Shader OurShader(vertexShaderPath, fragmentShaderPath);
@@ -183,12 +183,12 @@ int main()
 		glClearColor(0.3f, 0.5f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		lightPos = glm::vec3(glm::sin(glfwGetTime()) * 2.0f, 2.0f + glm::sin(glfwGetTime()), glm::cos(glfwGetTime()) * 2.0f);
+		lightPos = glm::vec3(glm::sin(glfwGetTime()) * 2.0f, 2.0f , glm::cos(glfwGetTime()) * 2.0f);
 
 		// 5 Activate Shader
 		OurShader.use();
 		OurShader.setVec3("lightPos", lightPos);
-		OurShader.setVec3("lightColor", glm::vec3(1.0f - glm::sin(glfwGetTime())*0.5f, 1.0f - glm::cos(glfwGetTime())*0.5f, 1.0f));
+		OurShader.setVec3("lightColor", glm::vec3(1.0f));
 		// 6 
 		glm::mat4 projection;
 		projection = myCamera.getCameraPerspMatrix();
@@ -210,7 +210,7 @@ int main()
 		lightModel = glm::translate(lightModel, lightPos);
 		lightModel = glm::scale(lightModel, glm::vec3(0.2f, 0.2f, 0.2f));
 		LightShader.setMat4("model", lightModel);
-		LightShader.setVec3("lightColor", glm::vec3(1.0f - glm::sin(glfwGetTime())*0.5f, 1.0f - glm::cos(glfwGetTime())*0.5f, 1.0f));
+		LightShader.setVec3("lightColor", glm::vec3(1.0f));
 		LightShader.setMat4("projection", projection);
 		LightShader.setMat4("view", view);
 		glBindVertexArray(lightVAO);
