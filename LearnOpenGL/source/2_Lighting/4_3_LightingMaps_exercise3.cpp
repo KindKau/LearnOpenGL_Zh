@@ -78,8 +78,8 @@ int main()
 
 
 	//---------------------------Shader-------------------------------
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps.fs";
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps_exercise3.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps_exercise3.fs";
 	const char* lightFragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.fs";
 	const char* lightVertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.vs";
 	Shader OurShader(vertexShaderPath, fragmentShaderPath);
@@ -156,7 +156,7 @@ int main()
 
 	//--------------------------------- TEXTURES -------------------------------------
 	unsigned int DiffuseTex = loadTexture("G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/resource/container2.png");
-	unsigned int SpecularTex = loadTexture("G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/resource/container2_specular.png");
+	unsigned int SpecularTex = loadTexture("G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/resource/lighting_maps_specular_color.png");
 	OurShader.use();
 	OurShader.setInt("material.diffuse", 0);
 	OurShader.setInt("material.specular", 1);

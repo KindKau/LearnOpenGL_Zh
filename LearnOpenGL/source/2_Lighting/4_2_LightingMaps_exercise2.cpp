@@ -78,8 +78,8 @@ int main()
 
 
 	//---------------------------Shader-------------------------------
-	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps.vs";
-	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps.fs";
+	const char* vertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps_exercise2.vs";
+	const char* fragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/9_lightingMaps_exercise2.fs";
 	const char* lightFragmentShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.fs";
 	const char* lightVertexShaderPath = "G:/GitHub/OpenGL/LearnOpenGL_Zh/LearnOpenGL/Shaders/4_colors_light.vs";
 	Shader OurShader(vertexShaderPath, fragmentShaderPath);
