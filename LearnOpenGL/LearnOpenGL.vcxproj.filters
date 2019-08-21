@@ -18,7 +18,7 @@
     <ClCompile Include="Includes\glad\src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\2_Lighting\3_1_Materials.cpp">
+    <ClCompile Include="source\2_Lighting\4_1_LightingMaps.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,6 +33,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Includes\learnopengl\camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\learnopengl\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

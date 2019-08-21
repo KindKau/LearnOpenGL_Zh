@@ -20,11 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Includes\glad\src\glad.c" />
-    <ClCompile Include="source\2_Lighting\3_1_Materials.cpp" />
+    <ClCompile Include="source\2_Lighting\4_1_LightingMaps.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\camera.h" />
     <ClInclude Include="Includes\learnopengl\camera.h" />
+    <ClInclude Include="Includes\learnopengl\Texture.h" />
     <ClInclude Include="Includes\Shader_s.h" />
     <ClInclude Include="Includes\stb_image.h" />
   </ItemGroup>
