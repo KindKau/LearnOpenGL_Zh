@@ -18,7 +18,7 @@
     <ClCompile Include="Includes\glad\src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\2_Lighting\4_4_LightingMaps_exercise4.cpp">
+    <ClCompile Include="source\2_Lighting\5_3_LightCasters_spotLight.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
